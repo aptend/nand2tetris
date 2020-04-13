@@ -45,7 +45,14 @@ we already know how to add two bits in half-adder, here we just need to add the 
 
 cascade n full-adders, every full-adder produces a bit of result
 
----
 
 ## ALU
+
+The essential part of ALU is the 6 control bits and control flow, all of them are already given.
+
+What we need to do is simply put all blocks together.
+
+- use Not to negate
+- use Mux handle selections happening in zx / nx / zy / ny / no
+- use Or16Way to set output status zr / ng
 
