@@ -56,3 +56,30 @@ What we need to do is simply put all blocks together.
 - use Mux handle selections happening in zx / nx / zy / ny / no
 - use Or16Way to set output status zr / ng
 
+
+# Perspectives
+
+## Another Adder
+```python
+def add(x, y):
+    MASK = 0xFFFFFFFF
+    res = x ^ y
+    carry = ((x & y) << 1) & MASK
+    while carry:
+        res, carry = res ^ carry, ((res & carry) << 1) & MASK
+    res &= MASK
+    if res >= 2 ** 31:
+        return res - 2 ** 32
+    else:
+        return res
+```
+
+we can calculate carry in a batch
+
+
+
+## Why Builtin chips are recommended when doing new project?
+two reasons:
+    
+1. It is kind of unittest. If some bugs come up, we will know them root in current implementations, having no matter with previous chips we have built. This is the only way to fight against complexity.
+2. HardwareSimulator will be more efficient to works with builtin chips.
