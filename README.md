@@ -7,3 +7,4 @@ I plan to learn the Part I.
 
 My log from brain:
 - [Project 1](01/README.md)
+- [Project 2](02/README.md)
