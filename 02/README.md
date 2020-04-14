@@ -72,6 +72,19 @@ def add(x, y):
         return res - 2 ** 32
     else:
         return res
+
+def test_add():
+    assert add(1, 2) == 3
+    assert add(1, 0) == 1
+    assert add(0, 0) == 0
+    assert add(-1, 2) == 1
+    assert add(-111, 110) == -1
+    assert add(-3, 2) == -1
+    assert add(-1, 0) == -1
+    assert add(-111, 11) == -100
+    assert add(2147483647, 0) == 2147483647
+    assert add(2147483647, 1) == -2147483648 # overflow
+    assert add(-2147483648, 0) == -2147483648
 ```
 
 we can calculate carry in a batch
