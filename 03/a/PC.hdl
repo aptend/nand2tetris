@@ -17,4 +17,12 @@ CHIP PC {
 
     PARTS:
     // Put your code here:
+    Inc16(in=feedback, out=inc1);
+    Mux16(a=feedback, b=inc1, sel=inc, out=doneinc);
+    Mux16(a=doneinc, b=in, sel=load, out=doneload);
+    Mux16(a=doneload, b=false, sel=reset, out=donereset);
+    // introduce DFF to enable loop connection
+    // load can be Or(inc, load, reset)
+    Register(in=donereset, load=true, out=feedback);
+    Or16(a=feedback, b=false, out=out);
 }
