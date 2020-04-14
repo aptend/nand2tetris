@@ -1,12 +1,17 @@
 # Lessons
 
 - combinational chips: functional, no state
+
+    Once given the input in one time cycle, the output can be determined in the same time cycle.
+
 - sequential chips: be able to maintain state(register) or operate on state(counter) 
     
     **consist of a layer of DFFs sandwithced between optional combinational logic layers**
     
-    DFF introduces an **inherent time delay**: the output at time *t* doesn't depend on itself, but rather on the output at time *t-1*. It is safe to form feedback in sequential chips
+    DFF introduces an **inherent time delay**: the output at time *t* doesn't depend on itself, but rather on the output at time *t-1*. It is safe to form feedback loop in sequential chips
 
+
+Of course, DFF can be made by combinational chips with loops. However, it is recommended to have separated mindsets for combinational and sequential chips. The combinational can't be loop connected and their outputs depend on inputs in the current time cycle. The sequential can be loop connected and their outputs depend on inputs in the previous time cycle.
 
 
 ## Concepts
