@@ -31,7 +31,7 @@ CPU register -> cache -> main memory -> disk
 we can get four addressing modes:
 - Register: `Add R2, R1, R3` // R2 <- R1 + R3
 - Immediate: `LOADI R1, 67` // R1 <- 67
-- Direct: `Load R1, 67` // R1 <- M[67]
+- Direct: `LOAD R1, 67` // R1 <- M[67]
 - Indirect: `LOAD* R2, R1` // R2 <- M[R1]
     
     In C language， `*n` means the value of `M[n]`
@@ -56,7 +56,7 @@ we can get four addressing modes:
 
 - Two memory address spaces (15-bit): *instruction memory(ROM>)* and *data memory(RAM)*
 - Two 16-bit register: *D* for store data values and *A* for data and address. label     *M* means the value of Memory[A]
-    > instruction memory width is 16, and space is 15-bit, it is impossible to store both op and address in only one instruction. Is this means no direct address in Hack?
+    > instruction memory width is 16, and space is 15-bit, it is impossible to store both op and address in only one instruction. So there is no direct access in Hack.
 
 ### A-Instruction
 
