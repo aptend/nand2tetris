@@ -11,3 +11,4 @@ My notes and thought process in each project:
 - [Project 3](03/README.md)
 - [Project 4](04/README.md)
 - [Project 5](05/README.md)
+- [Project 6](06/README.md)
