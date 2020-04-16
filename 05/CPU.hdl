@@ -54,18 +54,18 @@ CHIP CPU {
     And(a=instruction[9], b=cins, out=c3);
     And(a=instruction[10], b=cins, out=c2);
     And(a=instruction[11], b=cins, out=c1);
-    And(a=instruction[12], b=cins, out=a);
+    And(a=instruction[12], b=cins, out=sleM);
 
     // change content of A according to A- or C-instruction
     Mux16(a[0..14]=instruction[0..14], b=outA, sel=cins, out=toa);
-    DRegister(in=outD, load=dD, out=regd); // Data Register
-    Or(a=ains, b=dA, out=loadA); // if A-instruction, load A anyway
-    ARegister(in=toa, load=loadA, out=rega); // Addressing Register
-    Or16(a=rega, b=false, out[0..14]=addressM);
+    Or(a=ains, b=dA, out=loadA);
+    DRegister(in=outD, load=dD, out=regd);       // Data Register
+    ARegister(in=toa, load=loadA, out=rega);     // Addressing Register
+    Or16(a=rega, b=false, out[0..14]=addressM);  // dispatch address
     Or16(a=rega, b=false, out=toPC);
     
     // ALU things
-    Mux16(a=rega, b=inM, sel=a, out=mora); // change ALU mode.
+    Mux16(a=rega, b=inM, sel=sleM, out=mora);       // change ALU mode.
     ALU(x=regd, y=mora, zx=c1, nx=c2, zy=c3, ny=c4, f=c5, no=c6, out=aluout, zr=zr, ng=ng);
     Or16(a=aluout, b=false, out=outM);
     Or16(a=aluout, b=false, out=outD);
