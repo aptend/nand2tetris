@@ -39,5 +39,49 @@ CHIP CPU {
         pc[15];          // address of next instruction
 
     PARTS:
-    // Put your code here:
+    // decode the instruction
+    Or(a=instruction[15], b=false, out=cins);
+    Not(in=cins, out=ains);
+    And(a=instruction[0], b=cins, out=j3);
+    And(a=instruction[1], b=cins, out=j2);
+    And(a=instruction[2], b=cins, out=j1);
+    And(a=instruction[3], b=cins, out=writeM);
+    And(a=instruction[4], b=cins, out=dD);
+    And(a=instruction[5], b=cins, out=dA); 
+    And(a=instruction[6], b=cins, out=c6);
+    And(a=instruction[7], b=cins, out=c5);
+    And(a=instruction[8], b=cins, out=c4);
+    And(a=instruction[9], b=cins, out=c3);
+    And(a=instruction[10], b=cins, out=c2);
+    And(a=instruction[11], b=cins, out=c1);
+    And(a=instruction[12], b=cins, out=a);
+
+    // change content of A according to A- or C-instruction
+    Mux16(a[0..14]=instruction[0..14], b=outA, sel=cins, out=toa);
+    DRegister(in=outD, load=dD, out=regd); // Data Register
+    Or(a=ains, b=dA, out=loadA); // if A-instruction, load A anyway
+    ARegister(in=toa, load=loadA, out=rega); // Addressing Register
+    Or16(a=rega, b=false, out[0..14]=addressM);
+    Or16(a=rega, b=false, out=toPC);
+    
+    // ALU things
+    Mux16(a=rega, b=inM, sel=a, out=mora); // change ALU mode.
+    ALU(x=regd, y=mora, zx=c1, nx=c2, zy=c3, ny=c4, f=c5, no=c6, out=aluout, zr=zr, ng=ng);
+    Or16(a=aluout, b=false, out=outM);
+    Or16(a=aluout, b=false, out=outD);
+    Or16(a=aluout, b=false, out=outA);
+
+    // PC things
+    And3Way(a=j1, b=j2, c=j3, out=janyway);
+    Not(in=zr, out=notzr);
+    Xor(a=j1, b=j3, out=xorj13);
+    Xor(a=j3, b=ng, out=xorngj3);
+    And(a=xorj13, b=xorngj3, out=gtltmatch);
+    And(a=j1, b=j3, out=andj13);
+    Or(a=andj13, b=gtltmatch, out=negtltmatch);
+    And(a=notzr, b=negtltmatch, out=nzrmatch);
+    And(a=zr, b=j2, out=zrmatch);
+    Or(a=zrmatch, b=nzrmatch, out=jmatch);
+    Or(a=janyway, b=jmatch, out=jump);
+    PC(in=toPC, reset=reset, inc=true, load=jump, out[0..14]=pc);
 }

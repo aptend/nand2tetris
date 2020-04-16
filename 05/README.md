@@ -38,3 +38,24 @@ Outside logic
 
 ## Memory
 straight-forward
+
+## CPU
+
+d1 | instructin mode | write to ARegister
+--| -- | --
+0 | 0 | 1
+1 | 0 | 1
+1 | 1 | 1 
+0 | 1 | 0
+
+The hard part for me is `f(zr, ng, j-bits) -> pc_load`
+
+I put my solution as following:
+
+```python
+0 0 out > 0      101 001 011 | 111
+0 1 out < 0      101 100 110 | 111  not zr and (j1 & j3) or (j1 ^ j3 and ng ^ j3)
+1 0 out = 0      010 011 110 | 111  zr & j2
+jump_anyway = (j1 & j2 & j3)
+jump = jump_anyway or (zr & j2) or not zr and (j1 & j3) or (j1 ^ j3 and ng ^ j3)
+```
