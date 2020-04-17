@@ -308,8 +308,10 @@ def assemble(filepath):
         raise e.__class__(
             f"{e.__class__.__name__} at {parser.line_num} line: ", *e.args
         ) from e
-    dumper.commit()
-    f.close()
+    else:
+        dumper.commit()
+    finally:
+        f.close()
 
 
 if __name__ == "__main__":
