@@ -3,8 +3,8 @@ import re
 import os
 import shutil
 import tempfile
+import warnings
 from enum import Enum
-from warnings import warn
 from collections import deque
 
 
@@ -211,8 +211,7 @@ class Parser:
         j_matches = re.findall(r'(J(EQ|NE|LT|LE|GT|GE|MP)\s*@(.*?)\s*)$', line)
         if not m_matches and not j_matches:
             return False
-        if m_matches and j_matches:
-            warn('It is dangerous! You are using M and jump in one instrucion')
+
         if m_matches:
             mmacro, var = m_matches[0]
             if not all(m[1] == var for m in m_matches):
@@ -279,6 +278,12 @@ class Parser:
         comp, *jump = rest.rsplit(";", maxsplit=1)
         jump = jump[0].replace(" ", "") if jump else ""
         comp = comp.replace(" ", "")
+        if 'M' in dest+comp and jump != '':
+            warnings.warn(
+                f'line {self.line_num}: It seems that M and jump occur in'
+                'one instrucion. The program might not run as you expect.',
+                SyntaxWarning
+            )
         return dest, comp, jump
 
 
