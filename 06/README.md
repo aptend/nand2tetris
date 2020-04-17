@@ -14,6 +14,7 @@ Assembler can be written by any high-level language
 
 - Good for Hack asm file
 - Nice error handling, having readable error message
-- Support macro expand and it is easy to add more macros
-  - ✔ `D=M[R0]`、 `M[i]=M[i] + 1`
+- Support macro expand and it is easy to add more macros  
+   ✔ `D=M[R0]`、 `M[i]=M[i] + 1`  
+   ✔ `D;JGT @OUTPUT_FIRST`、 `0;JMP @INFINITE_LOOP`  
 - Be able to handle large asm file (actually unnecessary early optimization)

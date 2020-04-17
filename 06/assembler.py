@@ -4,6 +4,7 @@ import os
 import shutil
 import tempfile
 from enum import Enum
+from warnings import warn
 from collections import deque
 
 
@@ -207,14 +208,25 @@ class Parser:
                 self._ins_addr += 1
 
     def _try_macro_expand(self, line):
-        matches = re.findall(r'(M\[\s*(.*?)\s*\])', line)
-        if not matches:
+        m_matches = re.findall(r'(M\[\s*(.*?)\s*\])', line)
+        j_matches = re.findall(r'(J(EQ|NE|LT|LE|GT|GE|MP)\s*@(.*?)\s*)$', line)
+        if not m_matches and not j_matches:
             return False
-        macro, var = matches[0]
-        if not all(m[1] == var for m in matches):
-            raise MacroError("bad macro expression: inconsistent M[..]")
-        line = line.replace(macro, 'M')
-        self._expand_space.extend([f'@{var}', line])
+        if m_matches and j_matches:
+            warn('It is dangerous! You are using M and jump in one instrucion')
+        if m_matches:
+            mmacro, var = m_matches[0]
+            if not all(m[1] == var for m in m_matches):
+                raise MacroError("bad macro expression: inconsistent M[..]")
+            line = line.replace(mmacro, 'M')
+            self._expand_space.append(f'@{var}')
+
+        if j_matches:
+            jmacro, jtyp, jdest = j_matches[0]
+            line = line.replace(jmacro, jmacro[:3])
+            self._expand_space.append(f'@{jdest}')
+
+        self._expand_space.append(line)
         return True
 
     @property
