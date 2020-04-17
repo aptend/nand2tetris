@@ -99,6 +99,8 @@ class Encoder:
             "D|A": "010101",
         }
 
+        self.dest_map = dict(A=4, D=2, M=1)
+
     def c_ins(self, dest, comp, jump):
         select_mem = "0"
         # compose an instruction for operation on Memery[A]
@@ -116,11 +118,8 @@ class Encoder:
         dest_set = set(dest)
         if len(dest_set - set("ADM")) > 0:
             raise UnkownDestError(repr(dest))
-        dest_bin = ["0", "0", "0"]
-        dest_map = dict(A=0, D=1, M=2)
-        for d in dest_set:
-            dest_bin[dest_map[d]] = "1"
-        dest_bin = "".join(dest_bin)
+        s = sum(self.dest_map[d] for d in dest_set)
+        dest_bin = f"{s:03b}"
 
         return f"111{select_mem}{comp_bin}{dest_bin}{jump_bin}"
 
