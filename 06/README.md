@@ -12,7 +12,9 @@ Assembler can be written by any high-level language
 
 # Project
 
-Done for now: 
+My solution is line-based handling. It's simple and easyunderstood, but enough for Hack.
+
+Done for now:
 - Good for Hack asm file
 - Nice error handling, having readable error message
 - Support macro expand and it is easy to add more macros  
